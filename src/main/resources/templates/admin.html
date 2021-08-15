@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head th:replace="head :: head(~{::title},~{})">
+    <title th:text="#{title.admin} + ' — Delivery'">Administrative panel</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <header th:replace="header :: header"></header>
+
+    <div class="container-lg d-flex flex-column align-items-center">
+        <h1 style="margin-top: 50px;">Orders</h1>
+        <table class="table table-hover" style="width: 600px;">
+            <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col" th:text="#{order.cost}">Cost</th>
+                <th scope="col" th:text="#{order.route}">Route</th>
+                <th scope="col" th:text="#{order.address}">Address</th>
+                <th scope="col" th:text="#{order.status}">Status</th>
+                <th scope="col" th:text="#{order.actions}">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="order : ${orders}">
+                <th scope="row" th:text="${order.id}">Id</th>
+                <td th:text="${order.cost}">Cost</td>
+                <td th:text="${order.route.startPoint} + ' — ' + ${order.route.endPoint}">Route</td>
+                <td th:text="${order.address}">Address</td>
+                <td th:text="${order.status.name}">Status</td>
+                <td>
+                    <form th:if="${order.status.name == 'Processing'}" th:action="@{/admin/orders}" method="POST">
+                        <input type="hidden" name="id" th:value="${order.id}">
+                        <button class="btn btn-primary" type="submit" th:text="#{button.receipt}">Generate a receipt</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <footer th:replace="footer :: footer"></footer>
+</body>
+</html>

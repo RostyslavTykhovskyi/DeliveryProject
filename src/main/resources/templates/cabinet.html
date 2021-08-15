@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head th:replace="head :: head(~{::title},~{})">
+    <title th:text="#{title.cabinet} + ' — Delivery'">Personal cabinet</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <header th:replace="header :: header"></header>
+
+    <div class="container-lg d-flex flex-column align-items-center">
+        <div class="d-flex align-items-center" style="margin-top: 50px;">
+            <div class="me-2" th:text="'Balance: ' + ${balance} + ' ' + #{order.currency}">Balance: </div>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#topUpModal" th:text="#{button.topup}">
+                Top up
+            </button>
+            <div class="modal fade" id="topUpModal" tabindex="-1" aria-labelledby="topUpModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="topUpModalLabel" th:text="#{modal.topup}">Modal title</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="topUpForm" th:action="@{/cabinet/topup}" method="POST">
+                                <div class="mb-3">
+                                    <label for="amount" class="form-label" th:text="#{balance.amount}">Amount</label>
+                                    <input type="number" class="form-control" id="amount" name="amount" required>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{modal.close}">Close</button>
+                            <button form="topUpForm" type="submit" class="btn btn-primary" th:text="#{button.topup}">Top up</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <h1 style="margin-top: 50px;">Orders</h1>
+        <table class="table table-hover" style="width: 600px;">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col" th:text="#{order.cost}">Cost</th>
+                    <th scope="col" th:text="#{order.route}">Route</th>
+                    <th scope="col" th:text="#{order.address}">Address</th>
+                    <th scope="col" th:text="#{order.status}">Status</th>
+                    <th scope="col" th:text="#{order.actions}">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="order : ${orders}">
+                    <th scope="row" th:text="${order.id}">Id</th>
+                    <td th:text="${order.cost}">Cost</td>
+                    <td th:text="${order.route.startPoint} + ' — ' + ${order.route.endPoint}">Route</td>
+                    <td th:text="${order.address}">Address</td>
+                    <td th:text="${order.status.name}">Status</td>
+                    <td>
+                        <form th:if="${order.status.name == 'Awaiting payment'}" th:action="@{/cabinet}" method="POST">
+                            <input type="hidden" name="id" th:value="${order.id}">
+                            <button class="btn btn-primary" type="submit" th:text="#{button.pay}">Pay</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <footer th:replace="footer :: footer"></footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+</body>
+</html>

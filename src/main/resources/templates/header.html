@@ -1,0 +1,36 @@
+<header th:fragment="header">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-lg">
+            <a class="navbar-brand d-flex align-items-center me-5" href="/">
+                <img th:src="@{'/img/logo.png'}" alt="" width="50" height="50" class="d-inline-block align-text-top">
+                <div class="text-white ms-1">Delivery</div>
+            </a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/" th:text="#{link.home}">Home</a>
+                    </li>
+                    <li sec:authorize="!isAuthenticated()" class="nav-item">
+                        <a class="nav-link" href="/login" th:text="#{link.login}">Log in</a>
+                    </li>
+                    <li sec:authorize="!isAuthenticated()" class="nav-item">
+                        <a class="nav-link" href="/registration" th:text="#{link.registration}">Sign in</a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()" class="nav-item">
+                        <a class="nav-link" href="/cabinet" th:text="#{link.cabinet}">Personal cabinet</a>
+                    </li>
+                    <li sec:authorize="isAuthenticated() and hasRole('ADMIN')" class="nav-item">
+                        <a class="nav-link" href="/admin" th:text="#{link.admin}">Administrative panel</a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()" class="nav-item">
+                        <a class="nav-link" href="/logout" th:text="#{link.logout}">Log out</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <a class="nav-link text-white-50" href="?lang=en">EN</a>
+                    <a class="nav-link text-white-50" href="?lang=ua">UA</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>

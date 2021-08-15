@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<html lang="en">
+<head th:replace="head :: head(~{::title},~{})">
+    <title th:text="#{title.registration} + ' — Delivery'">Registration</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <header th:replace="header :: header"></header>
+
+    <div class="container" style="width: 500px; margin-top: 50px;">
+        <form th:action="@{/registration}" th:object="${user}" method="POST">
+            <div class="mb-3">
+                <label for="inputUsername" class="form-label" th:text="#{user.username}">Username</label>
+                <input type="text" class="form-control" id="inputUsername" th:field="*{username}" th:classappend="${#fields.hasErrors('username') ? 'is-invalid' : ''}" required>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('username')}" th:text="#{form.error.username}">
+                    Username should be 5-20 characters long.
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="inputEmail" class="form-label" th:text="#{user.email}">Email</label>
+                <input type="text" class="form-control" id="inputEmail" th:field="*{email}" th:classappend="${#fields.hasErrors('email') ? 'is-invalid' : ''}" required>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:text="#{form.error.email}">
+                    Invalid email.
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="inputPassword" class="form-label" th:text="#{user.password}">Password</label>
+                <input type="password" class="form-control" id="inputPassword" th:field="*{password}"  th:classappend="${#fields.hasErrors('password') ? 'is-invalid' : ''}" required>
+            </div>
+            <button type="submit" class="btn btn-primary" th:text="#{button.registration}">Submit</button>
+        </form>
+    </div>
+
+    <footer th:replace="footer :: footer"></footer>
+</body>
+</html>
