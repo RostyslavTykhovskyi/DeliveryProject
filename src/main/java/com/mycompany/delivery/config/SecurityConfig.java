@@ -63,8 +63,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorities(Collections.singleton(roleService.loadRoleByName("ROLE_USER")))
                 .build());
 
-        routeService.saveRoute(Route.builder().startPoint("Київ").endPoint("Рівне").length(327).build());
-        routeService.saveRoute(Route.builder().startPoint("Київ").endPoint("Львів").length(541).build());
+        routeService.saveRoute(Route.builder().departurePoint("Київ").arrivalPoint("Рівне").length(327).build());
+        routeService.saveRoute(Route.builder().departurePoint("Київ").arrivalPoint("Львів").length(541).build());
+        routeService.saveRoute(Route.builder().departurePoint("Київ").arrivalPoint("Одеса").length(546).build());
+        routeService.saveRoute(Route.builder().departurePoint("Київ").arrivalPoint("Харків").length(277).build());
+        routeService.saveRoute(Route.builder().departurePoint("Київ").arrivalPoint("Суми").length(135).build());
+        routeService.saveRoute(Route.builder().departurePoint("Київ").arrivalPoint("Вінниця").length(345).build());
     }
 
     @Override

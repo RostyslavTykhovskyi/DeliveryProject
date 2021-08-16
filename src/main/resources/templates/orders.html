@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head th:replace="head :: head(~{::title},~{})">
+    <title th:text="#{title.orders} + ' — Delivery'">Orders</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <header th:replace="header :: header"></header>
+
+    <div class="container-lg d-flex flex-column align-items-center">
+        <h1 style="margin-top: 50px;" th:text="#{orders}">Orders</h1>
+        <h3 th:if="${orderPage.content.size == 0}" th:text="#{empty}">Nothing to show</h3>
+        <table th:if="${orderPage.content.size > 0}" class="table table-hover" style="width: 800px;">
+            <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col" th:text="#{order.cost}">Cost</th>
+                <th scope="col" th:text="#{order.route}">Route</th>
+                <th scope="col" th:text="#{order.address}">Address</th>
+                <th scope="col" th:text="#{order.status}">Status</th>
+                <th scope="col" th:text="#{actions}">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="order : ${orderPage.content}">
+                <th scope="row" th:text="${order.id}">Id</th>
+                <td th:text="${order.cost}">Cost</td>
+                <td th:text="${order.route.departurePoint} + ' — ' + ${order.route.arrivalPoint}">Route</td>
+                <td th:text="${order.address}">Address</td>
+                <td th:text="${order.status.name}">Status</td>
+                <td>
+                    <form th:if="${order.status.name == 'Processing'}" th:action="@{/admin/orders}" method="POST">
+                        <input type="hidden" name="id" th:value="${order.id}">
+                        <button class="btn btn-primary" type="submit" th:text="#{button.receipt}">Generate a receipt</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <nav th:if="${orderPage.totalPages > 1}">
+            <ul class="pagination">
+                <li class="page-item" th:classappend="${orderPage.number == 0} ? disabled">
+                    <a class="page-link" th:href="@{/admin/orders(page=${orderPage.number})}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item" th:each="pageNumber : ${#numbers.sequence(1, orderPage.totalPages, 1)}" th:classappend="${pageNumber == orderPage.number + 1} ? active">
+                    <a class="page-link" th:href="@{/admin/orders(page=${pageNumber})}" th:text="${pageNumber}"></a>
+                </li>
+                <li class="page-item" th:classappend="${orderPage.number + 1 == orderPage.totalPages} ? disabled">
+                    <a class="page-link" th:href="@{/admin/orders(page=${orderPage.number + 2})}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <footer th:replace="footer :: footer"></footer>
+</body>
+</html>

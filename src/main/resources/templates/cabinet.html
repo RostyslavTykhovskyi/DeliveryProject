@@ -8,7 +8,7 @@
 
     <div class="container-lg d-flex flex-column align-items-center">
         <div class="d-flex align-items-center" style="margin-top: 50px;">
-            <div class="me-2" th:text="'Balance: ' + ${balance} + ' ' + #{order.currency}">Balance: </div>
+            <div class="me-2" th:text="#{user.balance} + ' ' + ${balance} + ' ' + #{order.currency}">Balance: </div>
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#topUpModal" th:text="#{button.topup}">
                 Top up
             </button>
@@ -36,8 +36,9 @@
             </div>
 
         </div>
-        <h1 style="margin-top: 50px;">Orders</h1>
-        <table class="table table-hover" style="width: 600px;">
+        <h1 style="margin-top: 50px;" th:text="#{orders}">Orders</h1>
+        <h3 th:if="${orderPage.content.size == 0}" th:text="#{empty}">Nothing to show</h3>
+        <table th:if="${orderPage.content.size > 0}" class="table table-hover" style="width: 800px;">
             <thead>
                 <tr>
                     <th scope="col">Id</th>
@@ -45,14 +46,14 @@
                     <th scope="col" th:text="#{order.route}">Route</th>
                     <th scope="col" th:text="#{order.address}">Address</th>
                     <th scope="col" th:text="#{order.status}">Status</th>
-                    <th scope="col" th:text="#{order.actions}">Action</th>
+                    <th scope="col" th:text="#{actions}">Action</th>
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="order : ${orders}">
+                <tr th:each="order : ${orderPage.content}">
                     <th scope="row" th:text="${order.id}">Id</th>
                     <td th:text="${order.cost}">Cost</td>
-                    <td th:text="${order.route.startPoint} + ' — ' + ${order.route.endPoint}">Route</td>
+                    <td th:text="${order.route.departurePoint} + ' — ' + ${order.route.arrivalPoint}">Route</td>
                     <td th:text="${order.address}">Address</td>
                     <td th:text="${order.status.name}">Status</td>
                     <td>
@@ -64,6 +65,24 @@
                 </tr>
             </tbody>
         </table>
+
+        <nav th:if="${orderPage.totalPages > 1}">
+            <ul class="pagination">
+                <li class="page-item" th:classappend="${orderPage.number == 0} ? disabled">
+                    <a class="page-link" th:href="@{/cabinet(page=${orderPage.number})}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item" th:each="pageNumber : ${#numbers.sequence(1, orderPage.totalPages, 1)}" th:classappend="${pageNumber == orderPage.number + 1} ? active">
+                    <a class="page-link" th:href="@{/cabinet(page=${pageNumber})}" th:text="${pageNumber}"></a>
+                </li>
+                <li class="page-item" th:classappend="${orderPage.number + 1 == orderPage.totalPages} ? disabled">
+                    <a class="page-link" th:href="@{/cabinet(page=${orderPage.number + 2})}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
 
     <footer th:replace="footer :: footer"></footer>

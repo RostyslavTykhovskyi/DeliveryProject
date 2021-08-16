@@ -12,14 +12,14 @@
             <div class="mb-3">
                 <label for="inputUsername" class="form-label" th:text="#{user.username}">Username</label>
                 <input type="text" class="form-control" id="inputUsername" th:field="*{username}" th:classappend="${#fields.hasErrors('username') ? 'is-invalid' : ''}" required>
-                <div class="invalid-feedback" th:if="${#fields.hasErrors('username')}" th:text="#{form.error.username}">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('username')}" th:text="#{error.username}">
                     Username should be 5-20 characters long.
                 </div>
             </div>
             <div class="mb-3">
                 <label for="inputEmail" class="form-label" th:text="#{user.email}">Email</label>
                 <input type="text" class="form-control" id="inputEmail" th:field="*{email}" th:classappend="${#fields.hasErrors('email') ? 'is-invalid' : ''}" required>
-                <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:text="#{form.error.email}">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:text="#{error.email}">
                     Invalid email.
                 </div>
             </div>

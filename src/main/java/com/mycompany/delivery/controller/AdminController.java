@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+@RequestMapping("/admin")
 public class AdminController {
     private final RouteService routeService;
     private final OrderService orderService;
@@ -25,22 +26,34 @@ public class AdminController {
         this.userService = userService;
     }
 
-    @RequestMapping("/admin")
+    @RequestMapping
     public String getAdminPage() {
-        return "redirect:/admin/orders";
-    }
-
-    @RequestMapping("admin/orders")
-    public String getAdminOrdersPage(Model model) {
-        model.addAttribute("orders", orderService.findAll());
         return "admin";
     }
 
-    @PostMapping("/admin/orders")
+    @RequestMapping("/orders")
+    public String getAdminOrdersPage(Model model, @RequestParam(name = "page", required = false, defaultValue = "1") int page) {
+        model.addAttribute("orderPage", orderService.findPaginated(page, 5));
+        return "orders";
+    }
+
+    @PostMapping("/orders")
     public String generateReceipt(@RequestParam(name = "id") long id) {
         Order order = orderService.findById(id);
         order.setStatus(Status.AWAITING_PAYMENT);
         orderService.saveOrder(order);
         return "redirect:/admin/orders";
+    }
+
+    @RequestMapping("/users")
+    public String getAdminUsersPage(Model model, @RequestParam(name = "page", required = false, defaultValue = "1") int page) {
+        model.addAttribute("userPage", userService.findPaginated(page, 5));
+        return "users";
+    }
+
+    @RequestMapping("/routes")
+    public String getAdminRoutesPage(Model model, @RequestParam(name = "page", required = false, defaultValue = "1") int page) {
+        model.addAttribute("routePage", routeService.findPaginated(page, 5));
+        return "routes";
     }
 }

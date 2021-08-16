@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+@RequestMapping("/cabinet")
 public class CabinetController {
     private final RouteService routeService;
     private final OrderService orderService;
@@ -25,21 +26,22 @@ public class CabinetController {
         this.userService = userService;
     }
 
-    @RequestMapping("/cabinet")
-    public String getCabinetPage(Model model) {
+    @RequestMapping
+    public String getCabinetPage(Model model, @RequestParam(name = "page", required = false, defaultValue = "1") int page) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        model.addAttribute("orderPage", orderService.findPaginatedByUserId(user.getId(), page, 5));
         model.addAttribute("balance", userService.findById(user.getId()).getBalance());
-        model.addAttribute("orders", orderService.findAllByUserId(user.getId()));
         return "cabinet";
     }
 
-    @PostMapping("/cabinet")
+    @PostMapping
     public String payForOrder(@RequestParam(name = "id") long id) {
         userService.payForOrder(orderService.findById(id));
         return "redirect:/cabinet";
     }
 
-    @PostMapping("/cabinet/topup")
+    @PostMapping("/topup")
     public String topUp(@RequestParam(name = "amount") int amount) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         user.setBalance(user.getBalance() + amount);

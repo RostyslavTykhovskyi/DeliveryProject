@@ -5,13 +5,16 @@ import com.mycompany.delivery.entity.Status;
 import com.mycompany.delivery.entity.User;
 import com.mycompany.delivery.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -33,12 +36,21 @@ public class UserService implements UserDetailsService {
         orderService.saveOrder(order);
     }
 
+    public Page<User> findPaginated(int currentPage, int pageSize) {
+        final Pageable pageable = PageRequest.of(currentPage - 1, pageSize);
+        return userRepository.findAll(pageable);
+    }
+
     public User findById(long id) {
         return userRepository.findById(id).orElseThrow(() -> new RuntimeException("user not found"));
     }
 
     public User saveUser(User user) {
         return userRepository.save(user);
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 
     @Override

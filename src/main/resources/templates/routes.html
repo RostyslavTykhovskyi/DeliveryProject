@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head th:replace="head :: head(~{::title},~{})">
+    <title th:text="#{title.routes} + ' — Delivery'">Routes</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<header th:replace="header :: header"></header>
+
+<div class="container-lg d-flex flex-column align-items-center">
+    <h1 style="margin-top: 50px;" th:text="#{routes}">Routes</h1>
+    <h3 th:if="${routePage.content.size == 0}" th:text="#{empty}">Nothing to show</h3>
+    <table th:if="${routePage.content.size > 0}" class="table table-hover" style="width: 600px;">
+        <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col" th:text="#{route.departure}">Departure point</th>
+            <th scope="col" th:text="#{route.arrival}">Arrival point</th>
+            <th scope="col" th:text="#{route.length}">Length</th>
+            <th scope="col" th:text="#{actions}">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="route : ${routePage.content}">
+            <th scope="row" th:text="${route.id}">Id</th>
+            <td th:text="${route.departurePoint}">Departure point</td>
+            <td th:text="${route.arrivalPoint}">Arrival point</td>
+            <td th:text="${route.length}">Length</td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <nav th:if="${routePage.totalPages > 1}">
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${routePage.number == 0} ? disabled">
+                <a class="page-link" th:href="@{/admin/routes(page=${routePage.number})}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item" th:each="pageNumber : ${#numbers.sequence(1, routePage.totalPages, 1)}" th:classappend="${pageNumber == routePage.number + 1} ? active">
+                <a class="page-link" th:href="@{/admin/routes(page=${pageNumber})}" th:text="${pageNumber}"></a>
+            </li>
+            <li class="page-item" th:classappend="${routePage.number + 1 == routePage.totalPages} ? disabled">
+                <a class="page-link" th:href="@{/admin/routes(page=${routePage.number + 2})}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<footer th:replace="footer :: footer"></footer>
+</body>
+</html>

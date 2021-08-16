@@ -11,7 +11,7 @@
         <div class="mb-3">
             <label for="route" class="form-label" th:text="#{order.route}">Route</label>
             <select id="route" class="form-select" th:field="*{route}">
-                <option th:each="route : ${routes}" th:value="${route.id}" th:text="${route.startPoint} + ' — ' + ${route.endPoint}"></option>
+                <option th:each="route : ${routes}" th:value="${route.id}" th:text="${route.departurePoint} + ' — ' + ${route.arrivalPoint}"></option>
             </select>
         </div>
         <div class="mb-3">

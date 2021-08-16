@@ -21,10 +21,10 @@ public class Route {
     @SequenceGenerator(name = "route_seq_gen", sequenceName = "route_id_seq")
     @Column(name = "route_id", nullable = false)
     private long id;
-    @Column(name = "start_point", nullable = false)
-    private String startPoint;
-    @Column(name = "end_point", nullable = false)
-    private String endPoint;
+    @Column(name = "departure_point", nullable = false)
+    private String departurePoint;
+    @Column(name = "arrival_point", nullable = false)
+    private String arrivalPoint;
     @Column(name = "length", nullable = false)
     private int length;
     @OneToMany(
