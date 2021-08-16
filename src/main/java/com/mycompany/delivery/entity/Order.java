@@ -3,6 +3,8 @@ package com.mycompany.delivery.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
@@ -21,16 +23,27 @@ public class Order {
     private long id;
     @Column(name = "cost", nullable = false)
     private int cost;
+
+    @Min(1)
     @Column(name = "weight", nullable = false)
     private int weight;
+
+    @Min(1)
     @Column(name = "length", nullable = false)
     private int length;
+
+    @Min(1)
     @Column(name = "width", nullable = false)
     private int width;
+
+    @Min(1)
     @Column(name = "height", nullable = false)
     private int height;
+
+    @NotBlank
     @Column(name = "address", nullable = false)
     private String address;
+
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status;

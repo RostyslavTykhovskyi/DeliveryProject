@@ -10,29 +10,44 @@
     <form th:action="@{/}" th:object="${order}" method="POST">
         <div class="mb-3">
             <label for="route" class="form-label" th:text="#{order.route}">Route</label>
-            <select id="route" class="form-select" th:field="*{route}">
+            <select id="route" class="form-select" th:field="*{route}" required>
                 <option th:each="route : ${routes}" th:value="${route.id}" th:text="${route.departurePoint} + ' — ' + ${route.arrivalPoint}"></option>
             </select>
         </div>
         <div class="mb-3">
-            <label for="length" class="form-label" th:text="#{route.length}">Length</label>
-            <input type="number" class="form-control" id="length" th:field="*{length}">
+            <label for="length" class="form-label" th:text="#{order.length}">Length</label>
+            <input type="number" class="form-control" id="length" th:field="*{length}" th:classappend="${#fields.hasErrors('length') ? 'is-invalid' : ''}" required>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('length')}" th:text="#{error.length}">
+                Length must be greater than 1.
+            </div>
         </div>
         <div class="mb-3">
             <label for="width" class="form-label" th:text="#{order.width}">Width</label>
-            <input type="number" class="form-control" id="width" th:field="*{width}">
+            <input type="number" class="form-control" id="width" th:field="*{width}" th:classappend="${#fields.hasErrors('width') ? 'is-invalid' : ''}" required>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('width')}" th:text="#{error.width}">
+                Width must be greater than 1.
+            </div>
         </div>
         <div class="mb-3">
             <label for="height" class="form-label" th:text="#{order.height}">Height</label>
-            <input type="number" class="form-control" id="height" th:field="*{height}">
+            <input type="number" class="form-control" id="height" th:field="*{height}" th:classappend="${#fields.hasErrors('height') ? 'is-invalid' : ''}" required>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('height')}" th:text="#{error.height}">
+                Height must be greater than 1.
+            </div>
         </div>
         <div class="mb-3">
             <label for="weight" class="form-label" th:text="#{order.weight}">Weight</label>
-            <input type="number" class="form-control" id="weight" th:field="*{weight}">
+            <input type="number" class="form-control" id="weight" th:field="*{weight}" th:classappend="${#fields.hasErrors('weight') ? 'is-invalid' : ''}" required>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('weight')}" th:text="#{error.weight}">
+                Weight must be greater than 1.
+            </div>
         </div>
         <div class="mb-3" sec:authorize="isAuthenticated()">
             <label for="address" class="form-label" th:text="#{order.address}">Address</label>
-            <input type="text" class="form-control" id="address" th:field="*{address}">
+            <input type="text" class="form-control" id="address" th:field="*{address}" th:classappend="${#fields.hasErrors('address') ? 'is-invalid' : ''}" required>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('address')}" th:text="#{error.address}">
+                Address must not be blank.
+            </div>
         </div>
         <div class="fs-3 mb-2" th:if="${cost}" th:text="#{order.cost} + ': ' + ${cost} + ' ' + #{order.currency}"></div>
         <input class="btn btn-primary" type="submit" name="calculate" th:value="#{button.calculate}">

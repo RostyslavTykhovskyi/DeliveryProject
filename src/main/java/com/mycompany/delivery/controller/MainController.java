@@ -10,10 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.validation.Valid;
 
 @Controller
 public class MainController {
@@ -43,7 +46,13 @@ public class MainController {
     }
 
     @PostMapping(value = "/", params = "makeOrder")
-    public String makeOrder(@ModelAttribute("order") Order order) {
+    public String makeOrder(@ModelAttribute("order") @Valid Order order, BindingResult bindingResult, Model model, @RequestParam(name = "lang", required = false) String lang) {
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("routes", routeService.findAll());
+            return "main";
+        }
+
         order.setStatus(Status.PROCESSING);
         order.setCost(orderService.calculateCost(order));
         order.setUser((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
