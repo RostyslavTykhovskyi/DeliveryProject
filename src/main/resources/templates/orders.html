@@ -12,12 +12,24 @@
         <table th:if="${orderPage.content.size > 0}" class="table table-hover" style="width: 800px;">
             <thead>
             <tr>
-                <th scope="col">Id</th>
-                <th scope="col" th:text="#{order.cost}">Cost</th>
-                <th scope="col" th:text="#{order.route}">Route</th>
-                <th scope="col" th:text="#{order.address}">Address</th>
-                <th scope="col" th:text="#{order.deliveryDate}">Delivery date</th>
-                <th scope="col" th:text="#{order.status}">Status</th>
+                <th scope="col">
+                    <a th:href="@{/admin/orders(page=${orderPage.number + 1}, sortField='id', sortDirection=${reverseSortDir})}">Id</a>
+                </th>
+                <th scope="col">
+                    <a th:href="@{/admin/orders(page=${orderPage.number + 1}, sortField='cost', sortDirection=${reverseSortDir})}" th:text="#{order.cost}">Cost</a>
+                </th>
+                <th scope="col">
+                    <a th:href="@{/admin/orders(page=${orderPage.number + 1}, sortField='route', sortDirection=${reverseSortDir})}" th:text="#{order.route}">Route</a>
+                </th>
+                <th scope="col">
+                    <a th:href="@{/admin/orders(page=${orderPage.number + 1}, sortField='address', sortDirection=${reverseSortDir})}" th:text="#{order.address}">Address</a>
+                </th>
+                <th scope="col">
+                    <a th:href="@{/admin/orders(page=${orderPage.number + 1}, sortField='deliveryDate', sortDirection=${reverseSortDir})}" th:text="#{order.deliveryDate}">Delivery date</a>
+                </th>
+                <th scope="col">
+                    <a th:href="@{/admin/orders(page=${orderPage.number + 1}, sortField='status', sortDirection=${reverseSortDir})}" th:text="#{order.status}">Status</a>
+                </th>
                 <th scope="col" th:text="#{actions}">Actions</th>
             </tr>
             </thead>
@@ -42,15 +54,15 @@
         <nav th:if="${orderPage.totalPages > 1}">
             <ul class="pagination">
                 <li class="page-item" th:classappend="${orderPage.number == 0} ? disabled">
-                    <a class="page-link" th:href="@{/admin/orders(page=${orderPage.number})}" aria-label="Previous">
+                    <a class="page-link" th:href="@{/admin/orders(page=${orderPage.number}, sortField=${sortField}, sortDirection=${sortDirection})}" aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
                 <li class="page-item" th:each="pageNumber : ${#numbers.sequence(1, orderPage.totalPages, 1)}" th:classappend="${pageNumber == orderPage.number + 1} ? active">
-                    <a class="page-link" th:href="@{/admin/orders(page=${pageNumber})}" th:text="${pageNumber}"></a>
+                    <a class="page-link" th:href="@{/admin/orders(page=${pageNumber}, sortField=${sortField}, sortDirection=${sortDirection})}" th:text="${pageNumber}"></a>
                 </li>
                 <li class="page-item" th:classappend="${orderPage.number + 1 == orderPage.totalPages} ? disabled">
-                    <a class="page-link" th:href="@{/admin/orders(page=${orderPage.number + 2})}" aria-label="Next">
+                    <a class="page-link" th:href="@{/admin/orders(page=${orderPage.number + 2}, sortField=${sortField}, sortDirection=${sortDirection})}" aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>

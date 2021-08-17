@@ -32,8 +32,16 @@ public class AdminController {
     }
 
     @RequestMapping("/orders")
-    public String getAdminOrdersPage(Model model, @RequestParam(name = "page", required = false, defaultValue = "1") int page) {
-        model.addAttribute("orderPage", orderService.findPaginated(page, 5));
+    public String getAdminOrdersPage(
+            @RequestParam(name = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(name = "sortField", required = false, defaultValue = "createdOn") String sortField,
+            @RequestParam(name = "sortDirection", required = false, defaultValue = "desc") String sortDirection,
+            Model model
+    ) {
+        model.addAttribute("orderPage", orderService.findPaginated(page, 5, sortField, sortDirection));
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDirection", sortDirection);
+        model.addAttribute("reverseSortDir", sortDirection.equals("asc") ? "desc" : "asc");
         return "orders";
     }
 
@@ -46,14 +54,30 @@ public class AdminController {
     }
 
     @RequestMapping("/users")
-    public String getAdminUsersPage(Model model, @RequestParam(name = "page", required = false, defaultValue = "1") int page) {
-        model.addAttribute("userPage", userService.findPaginated(page, 5));
+    public String getAdminUsersPage(
+            @RequestParam(name = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(name = "sortField", required = false, defaultValue = "id") String sortField,
+            @RequestParam(name = "sortDirection", required = false, defaultValue = "desc") String sortDirection,
+            Model model
+    ) {
+        model.addAttribute("userPage", userService.findPaginated(page, 5, sortField, sortDirection));
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDirection", sortDirection);
+        model.addAttribute("reverseSortDir", sortDirection.equals("asc") ? "desc" : "asc");
         return "users";
     }
 
     @RequestMapping("/routes")
-    public String getAdminRoutesPage(Model model, @RequestParam(name = "page", required = false, defaultValue = "1") int page) {
-        model.addAttribute("routePage", routeService.findPaginated(page, 5));
+    public String getAdminRoutesPage(
+            @RequestParam(name = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(name = "sortField", required = false, defaultValue = "id") String sortField,
+            @RequestParam(name = "sortDirection", required = false, defaultValue = "desc") String sortDirection,
+            Model model
+    ) {
+        model.addAttribute("routePage", routeService.findPaginated(page, 5, sortField, sortDirection));
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDirection", sortDirection);
+        model.addAttribute("reverseSortDir", sortDirection.equals("asc") ? "desc" : "asc");
         return "routes";
     }
 }

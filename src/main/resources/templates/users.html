@@ -12,10 +12,18 @@
     <table th:if="${userPage.content.size > 0}" class="table table-hover" style="width: 800px;">
         <thead>
         <tr>
-            <th scope="col">Id</th>
-            <th scope="col" th:text="#{user.username}">Cost</th>
-            <th scope="col" th:text="#{user.email}">Route</th>
-            <th scope="col" th:text="#{user.balance}">Address</th>
+            <th scope="col">
+                <a th:href="@{/admin/users(page=${userPage.number + 1}, sortField='id', sortDirection=${reverseSortDir})}">Id</a>
+            </th>
+            <th scope="col">
+                <a th:href="@{/admin/users(page=${userPage.number + 1}, sortField='username', sortDirection=${reverseSortDir})}" th:text="#{user.username}">username</a>
+            </th>
+            <th scope="col">
+                <a th:href="@{/admin/users(page=${userPage.number + 1}, sortField='email', sortDirection=${reverseSortDir})}" th:text="#{user.email}">Email</a>
+            </th>
+            <th scope="col">
+                <a th:href="@{/admin/users(page=${userPage.number + 1}, sortField='balance', sortDirection=${reverseSortDir})}" th:text="#{user.balance}">Balance</a>
+            </th>
             <th scope="col" th:text="#{actions}">Actions</th>
         </tr>
         </thead>
@@ -33,15 +41,15 @@
     <nav th:if="${userPage.totalPages > 1}">
         <ul class="pagination">
             <li class="page-item" th:classappend="${userPage.number == 0} ? disabled">
-                <a class="page-link" th:href="@{/admin/users(page=${userPage.number})}" aria-label="Previous">
+                <a class="page-link" th:href="@{/admin/users(page=${userPage.number}, sortField=${sortField}, sortDirection=${reverseSortDir})}" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
             <li class="page-item" th:each="pageNumber : ${#numbers.sequence(1, userPage.totalPages, 1)}" th:classappend="${pageNumber == userPage.number + 1} ? active">
-                <a class="page-link" th:href="@{/admin/users(page=${pageNumber})}" th:text="${pageNumber}"></a>
+                <a class="page-link" th:href="@{/admin/users(page=${pageNumber}, sortField=${sortField}, sortDirection=${reverseSortDir})}" th:text="${pageNumber}"></a>
             </li>
             <li class="page-item" th:classappend="${userPage.number + 1 == userPage.totalPages} ? disabled">
-                <a class="page-link" th:href="@{/admin/users(page=${userPage.number + 2})}" aria-label="Next">
+                <a class="page-link" th:href="@{/admin/users(page=${userPage.number + 2}, sortField=${sortField}, sortDirection=${reverseSortDir})}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>

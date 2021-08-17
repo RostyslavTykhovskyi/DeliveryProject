@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -40,6 +41,7 @@ public class User implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Min(0)
     @Column(name = "balance", nullable = false)
     private int balance;
 

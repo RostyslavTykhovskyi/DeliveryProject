@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,15 +30,17 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void payForOrder(Order order) {
-        User user = userRepository.findByUsername(order.getUser().getUsername()).orElseThrow(() -> new UsernameNotFoundException("user not found"));
+        User user = userRepository.findById(order.getUser().getId()).orElseThrow(() -> new UsernameNotFoundException("user not found"));
         user.setBalance(user.getBalance() - order.getCost());
         order.setStatus(Status.PAID);
         userRepository.save(user);
         orderService.saveOrder(order);
     }
 
-    public Page<User> findPaginated(int currentPage, int pageSize) {
-        final Pageable pageable = PageRequest.of(currentPage - 1, pageSize);
+    public Page<User> findPaginated(int currentPage, int pageSize, String sortField, String sortDirection) {
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
+                Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(currentPage - 1, pageSize, sort);
         return userRepository.findAll(pageable);
     }
 

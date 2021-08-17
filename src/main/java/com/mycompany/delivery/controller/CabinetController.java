@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/cabinet")
@@ -27,11 +25,19 @@ public class CabinetController {
     }
 
     @RequestMapping
-    public String getCabinetPage(Model model, @RequestParam(name = "page", required = false, defaultValue = "1") int page) {
+    public String getCabinetPage(
+            @RequestParam(name = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(name = "sortField", required = false, defaultValue = "id") String sortField,
+            @RequestParam(name = "sortDirection", required = false, defaultValue = "desc") String sortDirection,
+            Model model
+    ) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        model.addAttribute("orderPage", orderService.findPaginatedByUserId(user.getId(), page, 5));
+        model.addAttribute("orderPage", orderService.findPaginatedByUserId(user.getId(), page, 5, sortField, sortDirection));
         model.addAttribute("balance", userService.findById(user.getId()).getBalance());
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDirection", sortDirection);
+        model.addAttribute("reverseSortDir", sortDirection.equals("asc") ? "desc" : "asc");
         return "cabinet";
     }
 
