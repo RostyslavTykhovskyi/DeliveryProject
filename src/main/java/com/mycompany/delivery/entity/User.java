@@ -42,16 +42,22 @@ public class User implements UserDetails {
 
     @Column(name = "balance", nullable = false)
     private int balance;
+
     @Column(name = "account_non_expired", nullable = false)
     private boolean accountNonExpired;
+
     @Column(name = "account_non_locked", nullable = false)
     private boolean accountNonLocked;
+
     @Column(name = "credentials_non_expired", nullable = false)
     private boolean credentialsNonExpired;
+
     @Column(name = "enabled", nullable = false)
     private boolean enabled;
+
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> authorities = new HashSet<>();
+
     @OneToMany(
             mappedBy = "user",
             cascade = CascadeType.ALL,

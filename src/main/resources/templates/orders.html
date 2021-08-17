@@ -16,6 +16,7 @@
                 <th scope="col" th:text="#{order.cost}">Cost</th>
                 <th scope="col" th:text="#{order.route}">Route</th>
                 <th scope="col" th:text="#{order.address}">Address</th>
+                <th scope="col" th:text="#{order.deliveryDate}">Delivery date</th>
                 <th scope="col" th:text="#{order.status}">Status</th>
                 <th scope="col" th:text="#{actions}">Actions</th>
             </tr>
@@ -26,6 +27,7 @@
                 <td th:text="${order.cost}">Cost</td>
                 <td th:text="${order.route.departurePoint} + ' — ' + ${order.route.arrivalPoint}">Route</td>
                 <td th:text="${order.address}">Address</td>
+                <td th:text="${order.deliveryDate}">Delivery date</td>
                 <td th:text="${order.status.name}">Status</td>
                 <td>
                     <form th:if="${order.status.name == 'Processing'}" th:action="@{/admin/orders}" method="POST">

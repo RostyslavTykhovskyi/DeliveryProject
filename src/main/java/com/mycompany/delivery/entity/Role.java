@@ -21,8 +21,10 @@ public class Role implements GrantedAuthority {
     @SequenceGenerator(name = "role_seq_gen", sequenceName = "role_id_seq")
     @Column(name="role_id", nullable = false)
     private long id;
+
     @Column(name="name", nullable = false)
     private String name;
+
     @ManyToMany(mappedBy = "authorities")
     private Set<User> users;
 

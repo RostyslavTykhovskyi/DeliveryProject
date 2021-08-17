@@ -34,8 +34,8 @@ public class Route {
 
     @Min(1)
     @Column(name = "length", nullable = false)
-
     private int length;
+
     @OneToMany(
             mappedBy = "route",
             cascade = CascadeType.ALL,

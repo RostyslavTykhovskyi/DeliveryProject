@@ -49,6 +49,13 @@
                 Address must not be blank.
             </div>
         </div>
+        <div class="mb-3" sec:authorize="isAuthenticated()">
+            <label for="deliveryDate" class="form-label" th:text="#{order.deliveryDate}">Delivery date</label>
+            <input type="date" class="form-control" id="deliveryDate" th:attr="min=${minDate}" th:field="*{deliveryDate}" th:classappend="${#fields.hasErrors('deliveryDate') ? 'is-invalid' : ''}" required>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('deliveryDate')}" th:text="#{error.deliveryDate}">
+                Delivery date must be at least 3 days later than today.
+            </div>
+        </div>
         <div class="fs-3 mb-2" th:if="${cost}" th:text="#{order.cost} + ': ' + ${cost} + ' ' + #{order.currency}"></div>
         <input class="btn btn-primary" type="submit" name="calculate" th:value="#{button.calculate}">
         <input class="btn btn-primary" type="submit" name="makeOrder" sec:authorize="isAuthenticated()" th:value="#{button.order}">

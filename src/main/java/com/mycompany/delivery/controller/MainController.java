@@ -6,6 +6,8 @@ import com.mycompany.delivery.entity.User;
 import com.mycompany.delivery.service.OrderService;
 import com.mycompany.delivery.service.RouteService;
 import com.mycompany.delivery.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -17,9 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 
 @Controller
 public class MainController {
+    private static Logger log = LoggerFactory.getLogger(AdminController.class);
+
     private final RouteService routeService;
     private final OrderService orderService;
     private final UserService userService;
@@ -35,6 +40,7 @@ public class MainController {
     public String getMainPage(Model model) {
         model.addAttribute("order", new Order());
         model.addAttribute("routes", routeService.findAll());
+        model.addAttribute("minDate", LocalDate.now().plusDays(3));
         return "main";
     }
 
@@ -50,6 +56,7 @@ public class MainController {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("routes", routeService.findAll());
+            model.addAttribute("minDate", LocalDate.now().plusDays(3));
             return "main";
         }
 
