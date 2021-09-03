@@ -20,6 +20,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 
 @Entity
 @Table(name = "user", schema = "public")
@@ -28,14 +29,17 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq_gen")
     @SequenceGenerator(name = "user_seq_gen", sequenceName = "user_id_seq", allocationSize = 1)
     @Column(name = "user_id")
+    @EqualsAndHashCode.Include
     private long id;
 
     @Pattern(regexp = ValidationConstants.USERNAME_PATTERN)
     @Column(unique = true, nullable = false)
+    @EqualsAndHashCode.Include
     private String username;
 
     @Pattern(regexp = ValidationConstants.EMAIL_PATTERN)
     @Column(unique = true, nullable = false)
+    @EqualsAndHashCode.Include
     private String email;
     
     @Column(nullable = false)

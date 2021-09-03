@@ -54,7 +54,6 @@ public class RegistrationController {
             userService.saveUser(user);
         } catch (DataIntegrityViolationException ex) {
             model.addAttribute("error", "");
-
             return "registration";
         }
 
