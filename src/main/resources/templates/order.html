@@ -16,22 +16,22 @@
         </div>
         <div class="mb-3">
             <label for="length" class="form-label" th:text="#{order.length}">Length</label>
-            <input type="number" step="0.01" class="form-control" id="length" th:field="*{length}" th:classappend="${#fields.hasErrors('length') ? 'is-invalid' : ''}" required>
+            <input type="number" step="0.01" th:attr="min=${minDimension}, max=${maxDimension}" class="form-control" id="length" th:field="*{length}" th:classappend="${#fields.hasErrors('length') ? 'is-invalid' : ''}" required>
             <div class="invalid-feedback" th:if="${#fields.hasErrors('length')}" th:text="#{error.length} + ' ' + ${minDimension} + ' - ' + ${maxDimension} + ' ' + #{unitOfLength}"></div>
         </div>
         <div class="mb-3">
             <label for="width" class="form-label" th:text="#{order.width}">Width</label>
-            <input type="number" step="0.01" class="form-control" id="width" th:field="*{width}" th:classappend="${#fields.hasErrors('width') ? 'is-invalid' : ''}" required>
+            <input type="number" step="0.01" th:attr="min=${minDimension}, max=${maxDimension}" class="form-control" id="width" th:field="*{width}" th:classappend="${#fields.hasErrors('width') ? 'is-invalid' : ''}" required>
             <div class="invalid-feedback" th:if="${#fields.hasErrors('width')}" th:text="#{error.width} + ' ' + ${minDimension} + ' - ' + ${maxDimension} + ' ' + #{unitOfLength}"></div>
         </div>
         <div class="mb-3">
             <label for="height" class="form-label" th:text="#{order.height}">Height</label>
-            <input type="number" step="0.01" class="form-control" id="height" th:field="*{height}" th:classappend="${#fields.hasErrors('height') ? 'is-invalid' : ''}" required>
+            <input type="number" step="0.01" th:attr="min=${minDimension}, max=${maxDimension}" class="form-control" id="height" th:field="*{height}" th:classappend="${#fields.hasErrors('height') ? 'is-invalid' : ''}" required>
             <div class="invalid-feedback" th:if="${#fields.hasErrors('height')}" th:text="#{error.height} + ' ' + ${minDimension} + ' - ' + ${maxDimension} + ' ' + #{unitOfLength}"></div>
         </div>
         <div class="mb-3">
             <label for="weight" class="form-label" th:text="#{order.weight}">Weight</label>
-            <input type="number" step="0.01" class="form-control" id="weight" th:field="*{weight}" th:classappend="${#fields.hasErrors('weight') ? 'is-invalid' : ''}" required>
+            <input type="number" step="0.01" th:attr="min=${minWeight}, max=${maxWeight}" class="form-control" id="weight" th:field="*{weight}" th:classappend="${#fields.hasErrors('weight') ? 'is-invalid' : ''}" required>
             <div class="invalid-feedback" th:if="${#fields.hasErrors('weight')}" th:text="#{error.weight} + ' ' + ${minWeight} + ' - ' + ${maxWeight} + ' ' + #{unitOfMass}"></div>
         </div>
         <div class="mb-3" sec:authorize="isAuthenticated()">
@@ -41,7 +41,7 @@
         </div>
         <div class="mb-3" sec:authorize="isAuthenticated()">
             <label for="deliveryDate" class="form-label" th:text="#{order.deliveryDate}">Delivery date</label>
-            <input type="date" class="form-control" id="deliveryDate" th:field="*{deliveryDate}" th:classappend="${#fields.hasErrors('deliveryDate') ? 'is-invalid' : ''}" required>
+            <input type="date" th:attr="min=${minDate}, max=${maxDate}" class="form-control" id="deliveryDate" th:field="*{deliveryDate}" th:classappend="${#fields.hasErrors('deliveryDate') ? 'is-invalid' : ''}" required>
             <div class="invalid-feedback" th:if="${#fields.hasErrors('deliveryDate')}" th:text="#{error.deliveryDate} + ' ' + ${minDate} + ' - ' + ${maxDate}"></div>
         </div>
         <div class="fs-3 mb-2" th:if="${cost}" th:text="#{order.calculatedCost} + ': ' + ${cost} + ' ' + #{currency}"></div>

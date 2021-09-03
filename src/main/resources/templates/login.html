@@ -7,7 +7,7 @@
 <header th:replace="fragments/header :: header"></header>
 
 <div class="container" style="width: 500px; margin-top: 50px;">
-    <div class="alert alert-danger" role="alert" th:if="${error}">
+    <div class="alert alert-danger" role="alert" th:if="${error}" th:text="#{error.login">
         Incorrect username or password.
     </div>
     <form th:action="@{/login}" method="POST">

@@ -24,8 +24,6 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/order")
 public class OrderController {
-    private static Logger log = LoggerFactory.getLogger(AdminController.class);
-
     private final RouteService routeService;
     private final OrderService orderService;
 
@@ -36,7 +34,7 @@ public class OrderController {
     }
 
     @GetMapping
-    public String getMainPage(@RequestAttribute(name = "routeId") Optional<Long> routeId, Model model) {
+    public String getMainPage(@RequestParam(name = "routeId") Optional<Long> routeId, Model model) {
         Order order = new Order();
 
         routeId.ifPresent((id) -> order.setRoute(routeService.findById(id)));

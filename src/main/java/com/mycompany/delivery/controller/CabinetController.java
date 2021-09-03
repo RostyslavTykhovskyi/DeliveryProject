@@ -37,6 +37,7 @@ public class CabinetController {
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDirection", sortDirection);
         model.addAttribute("reverseSortDir", sortDirection.equals("asc") ? "desc" : "asc");
+
         return "cabinet";
     }
 
@@ -46,12 +47,10 @@ public class CabinetController {
         return "redirect:/cabinet";
     }
 
-    @PostMapping("/topUp")
-    public String topUp(@RequestParam(name = "amount") int amount) {
-        User userPrincipal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userService.findById(userPrincipal.getId());
-        user.setBalance(user.getBalance() + amount);
-        userService.saveUser(user);
+    @PostMapping("/topUpBalance")
+    public String topUpBalance(@RequestParam(name = "amount") int amount) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        userService.topUpBalance(user.getId(), amount);
         return "redirect:/cabinet";
     }
 }

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head th:replace="fragments/head :: head(~{::title},~{})">
+    <title th:text="#{title.error} + ' — Delivery'">Delivery</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<header th:replace="fragments/header :: header"></header>
+
+<div class="container" style="width: 500px; margin-top: 50px;">
+    <div class="alert alert-danger" th:text="${message}"></div>
+</div>
+
+<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

@@ -4,6 +4,7 @@ import com.mycompany.delivery.entity.User;
 import com.mycompany.delivery.service.RoleService;
 import com.mycompany.delivery.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,7 +36,7 @@ public class RegistrationController {
     }
 
     @PostMapping
-    public String registration(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
+    public String registration(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
             return "registration";
@@ -49,7 +50,13 @@ public class RegistrationController {
         user.setEnabled(true);
         user.setAuthorities(Collections.singleton(roleService.findByName("ROLE_USER")));
 
-        userService.saveUser(user);
+        try {
+            userService.saveUser(user);
+        } catch (DataIntegrityViolationException ex) {
+            model.addAttribute("error", "");
+
+            return "registration";
+        }
 
         return "redirect:/";
     }

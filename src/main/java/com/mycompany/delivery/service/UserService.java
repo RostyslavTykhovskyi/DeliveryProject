@@ -4,6 +4,8 @@ import com.mycompany.delivery.entity.Order;
 import com.mycompany.delivery.entity.Status;
 import com.mycompany.delivery.entity.User;
 import com.mycompany.delivery.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,25 +21,28 @@ import java.util.List;
 
 @Service
 public class UserService implements UserDetailsService {
-    private final UserRepository userRepository;
-    private final OrderService orderService;
+    Logger log = LoggerFactory.getLogger(UserService.class);
 
-    @Autowired
-    public UserService(UserRepository userRepository, OrderService orderService) {
+    private final UserRepository userRepository;
+    private final UserTransactional userTransactional;
+
+    public UserService(UserRepository userRepository, UserTransactional userTransactional) {
         this.userRepository = userRepository;
-        this.orderService = orderService;
+        this.userTransactional = userTransactional;
     }
 
-    @Transactional
     public void payForOrder(Order order) {
-        User user = findById(order.getUser().getId());
-        user.setBalance(user.getBalance() - order.getCost());
-        order.setStatus(Status.PAID);
-        userRepository.save(user);
-        orderService.saveOrder(order);
+        log.info("Paying for order with id = " + order.getId());
+        userTransactional.payForOrder(order);
+    }
+
+    public void topUpBalance(long userId, int amount) {
+        log.info("User with id = " + userId + " top up his balance");
+        userTransactional.topUpBalance(userId, amount);
     }
 
     public Page<User> findPaginated(int currentPage, int pageSize, String sortField, String sortDirection) {
+        log.info("Finding paginated users");
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
         Pageable pageable = PageRequest.of(currentPage - 1, pageSize, sort);
@@ -45,15 +50,13 @@ public class UserService implements UserDetailsService {
     }
 
     public User findById(long id) {
+        log.info("Finding user by id = " + id);
         return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User with id " + id + " was not found"));
     }
 
     public User saveUser(User user) {
+        log.info("Saving user");
         return userRepository.save(user);
-    }
-
-    public List<User> findAll() {
-        return userRepository.findAll();
     }
 
     @Override
