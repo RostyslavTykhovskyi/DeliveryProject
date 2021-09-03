@@ -20,20 +20,20 @@ import java.util.List;
 public class Route {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "route_seq_gen")
-    @SequenceGenerator(name = "route_seq_gen", sequenceName = "route_id_seq")
-    @Column(name = "route_id", nullable = false)
+    @SequenceGenerator(name = "route_seq_gen", sequenceName = "route_id_seq", allocationSize = 1)
+    @Column(name = "route_id")
     private long id;
 
     @NotBlank
-    @Column(name = "departure_point", nullable = false)
+    @Column(nullable = false)
     private String departurePoint;
 
     @NotBlank
-    @Column(name = "arrival_point", nullable = false)
+    @Column(nullable = false)
     private String arrivalPoint;
 
     @Min(1)
-    @Column(name = "length", nullable = false)
+    @Column(nullable = false)
     private int length;
 
     @OneToMany(

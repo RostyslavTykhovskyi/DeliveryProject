@@ -1,34 +1,34 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org">
-<head th:replace="head :: head(~{::title},~{})">
+<head th:replace="fragments/head :: head(~{::title},~{})">
     <title th:text="#{title.orders} + ' — Delivery'">Orders</title>
 </head>
 <body class="d-flex flex-column min-vh-100">
-    <header th:replace="header :: header"></header>
+    <header th:replace="fragments/header :: header"></header>
 
     <div class="container-lg d-flex flex-column align-items-center">
         <h1 style="margin-top: 50px;" th:text="#{orders}">Orders</h1>
         <h3 th:if="${orderPage.content.size == 0}" th:text="#{empty}">Nothing to show</h3>
-        <table th:if="${orderPage.content.size > 0}" class="table table-hover" style="width: 800px;">
+        <table th:if="${orderPage.content.size > 0}" class="table table-hover align-middle" style="width: 800px;">
             <thead>
             <tr>
                 <th scope="col">
-                    <a th:href="@{/admin/orders(page=${orderPage.number + 1}, sortField='id', sortDirection=${reverseSortDir})}">Id</a>
+                    <a class="link-dark text-decoration-none" th:href="@{/admin/orders(page=${orderPage.number + 1}, sortField='id', sortDirection=${reverseSortDir})}" th:text="${sortField != 'id'} ? 'Id' : 'Id' + ${sortDirection == 'desc' ? '▾' : '▴'}">Id</a>
                 </th>
                 <th scope="col">
-                    <a th:href="@{/admin/orders(page=${orderPage.number + 1}, sortField='cost', sortDirection=${reverseSortDir})}" th:text="#{order.cost}">Cost</a>
+                    <a class="link-dark text-decoration-none" th:href="@{/admin/orders(page=${orderPage.number + 1}, sortField='cost', sortDirection=${reverseSortDir})}" th:text="${sortField != 'cost'} ? #{order.cost} : #{order.cost} + ${sortDirection == 'desc' ? '▾' : '▴'}">Cost</a>
                 </th>
                 <th scope="col">
-                    <a th:href="@{/admin/orders(page=${orderPage.number + 1}, sortField='route', sortDirection=${reverseSortDir})}" th:text="#{order.route}">Route</a>
+                    <a class="link-dark text-decoration-none" th:href="@{/admin/orders(page=${orderPage.number + 1}, sortField='route', sortDirection=${reverseSortDir})}" th:text="${sortField != 'route'} ? #{order.route} : #{order.route} + ${sortDirection == 'desc' ? '▾' : '▴'}">Route</a>
                 </th>
                 <th scope="col">
-                    <a th:href="@{/admin/orders(page=${orderPage.number + 1}, sortField='address', sortDirection=${reverseSortDir})}" th:text="#{order.address}">Address</a>
+                    <a class="link-dark text-decoration-none" th:href="@{/admin/orders(page=${orderPage.number + 1}, sortField='address', sortDirection=${reverseSortDir})}" th:text="${sortField != 'address'} ? #{order.address} : #{order.address} + ${sortDirection == 'desc' ? '▾' : '▴'}">Address</a>
                 </th>
                 <th scope="col">
-                    <a th:href="@{/admin/orders(page=${orderPage.number + 1}, sortField='deliveryDate', sortDirection=${reverseSortDir})}" th:text="#{order.deliveryDate}">Delivery date</a>
+                    <a class="link-dark text-decoration-none" th:href="@{/admin/orders(page=${orderPage.number + 1}, sortField='deliveryDate', sortDirection=${reverseSortDir})}" th:text="${sortField != 'deliveryDate'} ? #{order.deliveryDate} : #{order.deliveryDate} + ${sortDirection == 'desc' ? '▾' : '▴'}">Delivery date</a>
                 </th>
                 <th scope="col">
-                    <a th:href="@{/admin/orders(page=${orderPage.number + 1}, sortField='status', sortDirection=${reverseSortDir})}" th:text="#{order.status}">Status</a>
+                    <a class="link-dark text-decoration-none" th:href="@{/admin/orders(page=${orderPage.number + 1}, sortField='status', sortDirection=${reverseSortDir})}" th:text="${sortField != 'status'} ? #{order.status} : #{order.status} + ${sortDirection == 'desc' ? '▾' : '▴'}">Status</a>
                 </th>
                 <th scope="col" th:text="#{actions}">Actions</th>
             </tr>
@@ -42,7 +42,7 @@
                 <td th:text="${order.deliveryDate}">Delivery date</td>
                 <td th:text="${order.status.name}">Status</td>
                 <td>
-                    <form th:if="${order.status.name == 'Processing'}" th:action="@{/admin/orders}" method="POST">
+                    <form th:if="${order.status.name == 'Processing'}" th:action="@{/admin/orders}" method="POST" style="margin: 0">
                         <input type="hidden" name="id" th:value="${order.id}">
                         <button class="btn btn-primary" type="submit" th:text="#{button.receipt}">Generate a receipt</button>
                     </form>
@@ -70,6 +70,6 @@
         </nav>
     </div>
 
-    <footer th:replace="footer :: footer"></footer>
+    <footer th:replace="fragments/footer :: footer"></footer>
 </body>
 </html>

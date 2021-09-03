@@ -18,6 +18,10 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
+    public int calculateCost(Order order) {
+        return (int) (order.getRoute().getLength() / 10 + order.getLength() + order.getWidth() + order.getHeight() + order.getWeight());
+    }
+
     public Page<Order> findPaginatedByUserId(long userId, int currentPage, int pageSize, String sortField, String sortDirection) {
         Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
@@ -32,23 +36,19 @@ public class OrderService {
         return orderRepository.findAll(pageable);
     }
 
+    public Order saveOrder(Order order) {
+        return orderRepository.save(order);
+    }
+
+    public Order findById(Long id) {
+        return orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order with id " + id + " was not found"));
+    }
+
     public List<Order> findAll() {
         return orderRepository.findAll();
     }
 
     public List<Order> findAllByUserId(long userId) {
         return orderRepository.findAll().stream().filter((o) -> o.getUser().getId() == userId).collect(Collectors.toList());
-    }
-
-    public Order findById(Long id) {
-        return orderRepository.findById(id).orElseThrow(() -> new RuntimeException("not found"));
-    }
-
-    public int calculateCost(Order order) {
-        return order.getRoute().getLength() / 10 + order.getLength() + order.getWidth() + order.getHeight() + order.getWeight();
-    }
-
-    public Order saveOrder(Order order) {
-        return orderRepository.save(order);
     }
 }

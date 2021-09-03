@@ -17,7 +17,6 @@ public class CabinetController {
     private final OrderService orderService;
     private final UserService userService;
 
-    @Autowired
     public CabinetController(RouteService routeService, OrderService orderService, UserService userService) {
         this.routeService = routeService;
         this.orderService = orderService;
@@ -41,15 +40,16 @@ public class CabinetController {
         return "cabinet";
     }
 
-    @PostMapping
+    @PostMapping("/payForOrder")
     public String payForOrder(@RequestParam(name = "id") long id) {
         userService.payForOrder(orderService.findById(id));
         return "redirect:/cabinet";
     }
 
-    @PostMapping("/topup")
+    @PostMapping("/topUp")
     public String topUp(@RequestParam(name = "amount") int amount) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User userPrincipal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userService.findById(userPrincipal.getId());
         user.setBalance(user.getBalance() + amount);
         userService.saveUser(user);
         return "redirect:/cabinet";

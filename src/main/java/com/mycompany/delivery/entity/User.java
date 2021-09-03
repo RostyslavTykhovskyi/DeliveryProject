@@ -1,11 +1,13 @@
 package com.mycompany.delivery.entity;
 
+import com.mycompany.delivery.validator.ValidationConstants;
 import lombok.*;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,41 +22,39 @@ import java.util.Set;
 @ToString
 
 @Entity
-@Table( name = "user",
-        schema = "public",
-        uniqueConstraints={@UniqueConstraint(columnNames = {"username"})})
+@Table(name = "user", schema = "public")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq_gen")
-    @SequenceGenerator(name = "user_seq_gen", sequenceName = "user_id_seq")
-    @Column(name = "user_id", nullable = false)
+    @SequenceGenerator(name = "user_seq_gen", sequenceName = "user_id_seq", allocationSize = 1)
+    @Column(name = "user_id")
     private long id;
 
-    @Size(min = 5, max = 20)
-    @Column(name = "username", nullable = false)
+    @Pattern(regexp = ValidationConstants.USERNAME_PATTERN)
+    @Column(unique = true, nullable = false)
     private String username;
 
-    @Email
-    @Column(name = "email", nullable = false)
+    @Pattern(regexp = ValidationConstants.EMAIL_PATTERN)
+    @Column(unique = true, nullable = false)
     private String email;
-
-    @Column(name = "password", nullable = false)
+    
+    @Column(nullable = false)
     private String password;
 
     @Min(0)
-    @Column(name = "balance", nullable = false)
+    @Column(nullable = false)
     private int balance;
 
-    @Column(name = "account_non_expired", nullable = false)
+    @Column(nullable = false)
     private boolean accountNonExpired;
 
-    @Column(name = "account_non_locked", nullable = false)
+    @Column(nullable = false)
     private boolean accountNonLocked;
 
-    @Column(name = "credentials_non_expired", nullable = false)
+    @Column(nullable = false)
     private boolean credentialsNonExpired;
 
-    @Column(name = "enabled", nullable = false)
+    @Column(nullable = false)
     private boolean enabled;
 
     @ManyToMany(fetch = FetchType.EAGER)

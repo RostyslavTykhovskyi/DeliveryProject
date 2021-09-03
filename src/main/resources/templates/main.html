@@ -1,67 +1,67 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org">
-<head th:replace="head :: head(~{::title},~{})">
+<head th:replace="fragments/head :: head(~{::title},~{})">
     <title th:text="#{title.home} + ' — Delivery'">Delivery</title>
 </head>
 <body class="d-flex flex-column min-vh-100">
-<header th:replace="header :: header"></header>
+<header th:replace="fragments/header :: header"></header>
 
-<div class="container" style="width: 500px; margin-top: 50px; margin-bottom: 50px;">
-    <form th:action="@{/}" th:object="${order}" method="POST">
-        <div class="mb-3">
-            <label for="route" class="form-label" th:text="#{order.route}">Route</label>
-            <select id="route" class="form-select" th:field="*{route}" required>
-                <option th:each="route : ${routes}" th:value="${route.id}" th:text="${route.departurePoint} + ' — ' + ${route.arrivalPoint}"></option>
-            </select>
-        </div>
-        <div class="mb-3">
-            <label for="length" class="form-label" th:text="#{order.length}">Length</label>
-            <input type="number" class="form-control" id="length" th:field="*{length}" th:classappend="${#fields.hasErrors('length') ? 'is-invalid' : ''}" required>
-            <div class="invalid-feedback" th:if="${#fields.hasErrors('length')}" th:text="#{error.length}">
-                Length must be greater than 1.
-            </div>
-        </div>
-        <div class="mb-3">
-            <label for="width" class="form-label" th:text="#{order.width}">Width</label>
-            <input type="number" class="form-control" id="width" th:field="*{width}" th:classappend="${#fields.hasErrors('width') ? 'is-invalid' : ''}" required>
-            <div class="invalid-feedback" th:if="${#fields.hasErrors('width')}" th:text="#{error.width}">
-                Width must be greater than 1.
-            </div>
-        </div>
-        <div class="mb-3">
-            <label for="height" class="form-label" th:text="#{order.height}">Height</label>
-            <input type="number" class="form-control" id="height" th:field="*{height}" th:classappend="${#fields.hasErrors('height') ? 'is-invalid' : ''}" required>
-            <div class="invalid-feedback" th:if="${#fields.hasErrors('height')}" th:text="#{error.height}">
-                Height must be greater than 1.
-            </div>
-        </div>
-        <div class="mb-3">
-            <label for="weight" class="form-label" th:text="#{order.weight}">Weight</label>
-            <input type="number" class="form-control" id="weight" th:field="*{weight}" th:classappend="${#fields.hasErrors('weight') ? 'is-invalid' : ''}" required>
-            <div class="invalid-feedback" th:if="${#fields.hasErrors('weight')}" th:text="#{error.weight}">
-                Weight must be greater than 1.
-            </div>
-        </div>
-        <div class="mb-3" sec:authorize="isAuthenticated()">
-            <label for="address" class="form-label" th:text="#{order.address}">Address</label>
-            <input type="text" class="form-control" id="address" th:field="*{address}" th:classappend="${#fields.hasErrors('address') ? 'is-invalid' : ''}" required>
-            <div class="invalid-feedback" th:if="${#fields.hasErrors('address')}" th:text="#{error.address}">
-                Address must not be blank.
-            </div>
-        </div>
-        <div class="mb-3" sec:authorize="isAuthenticated()">
-            <label for="deliveryDate" class="form-label" th:text="#{order.deliveryDate}">Delivery date</label>
-            <input type="date" class="form-control" id="deliveryDate" th:attr="min=${minDate}" th:field="*{deliveryDate}" th:classappend="${#fields.hasErrors('deliveryDate') ? 'is-invalid' : ''}" required>
-            <div class="invalid-feedback" th:if="${#fields.hasErrors('deliveryDate')}" th:text="#{error.deliveryDate}">
-                Delivery date must be at least 3 days later than today.
-            </div>
-        </div>
-        <div class="fs-3 mb-2" th:if="${cost}" th:text="#{order.cost} + ': ' + ${cost} + ' ' + #{order.currency}"></div>
-        <input class="btn btn-primary" type="submit" name="calculate" th:value="#{button.calculate}">
-        <input class="btn btn-primary" type="submit" name="makeOrder" sec:authorize="isAuthenticated()" th:value="#{button.order}">
-    </form>
+<div class="container-lg d-flex flex-column align-items-center">
+    <h1 style="margin-top: 50px;" th:text="#{routes}">Routes</h1>
+    <h3 th:if="${routePage.content.size == 0}" th:text="#{empty}">Nothing to show</h3>
+    <table th:if="${routePage.content.size > 0}" class="table table-hover align-middle" style="width: 800px;">
+        <thead>
+        <tr>
+            <th scope="col">
+                <a class="link-dark text-decoration-none" th:href="@{/(page=${routePage.number + 1}, sortField='id', sortDirection=${reverseSortDir})}" th:text="${sortField != 'id'} ? 'Id' : 'Id' + ${sortDirection == 'desc' ? '▾' : '▴'}">Id</a>
+            </th>
+            <th scope="col">
+                <a class="link-dark text-decoration-none" th:href="@{/(page=${routePage.number + 1}, sortField='departurePoint', sortDirection=${reverseSortDir})}" th:text="${sortField != 'departurePoint'} ? #{route.departure} : #{route.departure} + ${sortDirection == 'desc' ? '▾' : '▴'}">Departure point</a>
+            </th>
+            <th scope="col">
+                <a class="link-dark text-decoration-none" th:href="@{/(page=${routePage.number + 1}, sortField='arrivalPoint', sortDirection=${reverseSortDir})}" th:text="${sortField != 'arrivalPoint'} ? #{route.arrival} : #{route.arrival} + ${sortDirection == 'desc' ? '▾' : '▴'}">Arrival point</a>
+            </th>
+            <th scope="col">
+                <a class="link-dark text-decoration-none" th:href="@{/(page=${routePage.number + 1}, sortField='length', sortDirection=${reverseSortDir})}" th:text="${sortField != 'length'} ? #{route.length} : #{route.length} + ${sortDirection == 'desc' ? '▾' : '▴'}">Length</a>
+            </th>
+            <th scope="col" th:text="#{actions}">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="route : ${routePage.content}">
+            <th scope="row" th:text="${route.id}">Id</th>
+            <td th:text="${route.departurePoint}">Departure point</td>
+            <td th:text="${route.arrivalPoint}">Arrival point</td>
+            <td th:text="${route.length}">Length</td>
+            <td>
+                <form th:action="@{/order}" method="GET" style="margin: 0">
+                    <input type="hidden" name="routeId" th:value="${route.id}">
+                    <button class="btn btn-primary" type="submit" th:text="#{button.order}">Make order</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <nav th:if="${routePage.totalPages > 1}">
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${routePage.number == 0} ? disabled">
+                <a class="page-link" th:href="@{/(page=${routePage.number}, sortField=${sortField}, sortDirection=${reverseSortDir})}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item" th:each="pageNumber : ${#numbers.sequence(1, routePage.totalPages, 1)}" th:classappend="${pageNumber == routePage.number + 1} ? active">
+                <a class="page-link" th:href="@{/(page=${pageNumber}, sortField=${sortField}, sortDirection=${reverseSortDir})}" th:text="${pageNumber}"></a>
+            </li>
+            <li class="page-item" th:classappend="${routePage.number + 1 == routePage.totalPages} ? disabled">
+                <a class="page-link" th:href="@{/(page=${routePage.number + 2}, sortField=${sortField}, sortDirection=${reverseSortDir})}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </div>
 
-<footer th:replace="footer :: footer"></footer>
+<footer th:replace="fragments/footer :: footer"></footer>
 </body>
 </html>

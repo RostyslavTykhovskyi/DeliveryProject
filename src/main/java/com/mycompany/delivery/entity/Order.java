@@ -1,13 +1,15 @@
 package com.mycompany.delivery.entity;
 
+import com.mycompany.delivery.validator.CalculateOrderValidation;
+import com.mycompany.delivery.validator.FullOrderValidation;
+import com.mycompany.delivery.validator.ValidDate;
+import com.mycompany.delivery.validator.ValidationConstants;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.Future;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -23,44 +25,48 @@ import java.time.LocalDateTime;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_seq_gen")
-    @SequenceGenerator(name = "order_seq_gen", sequenceName = "order_id_seq")
-    @Column(name = "order_id", nullable = false)
+    @SequenceGenerator(name = "order_seq_gen", sequenceName = "order_id_seq", allocationSize = 1)
+    @Column(name = "order_id")
     private long id;
 
-    @Column(name = "cost", nullable = false)
+    @Column(nullable = false)
     private int cost;
 
-    @Min(1)
-    @Column(name = "weight", nullable = false)
-    private int weight;
+    @DecimalMin(value = ValidationConstants.MIN_WEIGHT, groups = {CalculateOrderValidation.class, FullOrderValidation.class})
+    @DecimalMax(value = ValidationConstants.MAX_WEIGHT, groups = {CalculateOrderValidation.class, FullOrderValidation.class})
+    @Column(nullable = false)
+    private double weight;
 
-    @Min(1)
-    @Column(name = "length", nullable = false)
-    private int length;
+    @DecimalMin(value = ValidationConstants.MIN_DIMENSION, groups = {CalculateOrderValidation.class, FullOrderValidation.class})
+    @DecimalMax(value = ValidationConstants.MAX_DIMENSION, groups = {CalculateOrderValidation.class, FullOrderValidation.class})
+    @Column(nullable = false)
+    private double length;
 
-    @Min(1)
-    @Column(name = "width", nullable = false)
-    private int width;
+    @DecimalMin(value = ValidationConstants.MIN_DIMENSION, groups = {CalculateOrderValidation.class, FullOrderValidation.class})
+    @DecimalMax(value = ValidationConstants.MAX_DIMENSION, groups = {CalculateOrderValidation.class, FullOrderValidation.class})
+    @Column(nullable = false)
+    private double width;
 
-    @Min(1)
-    @Column(name = "height", nullable = false)
-    private int height;
+    @DecimalMin(value = ValidationConstants.MIN_DIMENSION, groups = {CalculateOrderValidation.class, FullOrderValidation.class})
+    @DecimalMax(value = ValidationConstants.MAX_DIMENSION, groups = {CalculateOrderValidation.class, FullOrderValidation.class})
+    @Column(nullable = false)
+    private double height;
 
-    @NotBlank
-    @Column(name = "address", nullable = false)
+    @NotBlank(groups = FullOrderValidation.class)
+    @Column(nullable = false)
     private String address;
 
-    @Future
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    @Column(name = "delivery_date", nullable = false)
-    private LocalDate deliveryDate;
-
-    @Column(name = "status", nullable = false)
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @ValidDate(groups = FullOrderValidation.class)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @Column(nullable = false)
+    private LocalDate deliveryDate;
+
     @CreationTimestamp
-    @Column(name = "created_on", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime createdOn;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -47,7 +47,7 @@ public class RegistrationController {
         user.setAccountNonLocked(true);
         user.setCredentialsNonExpired(true);
         user.setEnabled(true);
-        user.setAuthorities(Collections.singleton(roleService.loadRoleByName("ROLE_USER")));
+        user.setAuthorities(Collections.singleton(roleService.findByName("ROLE_USER")));
 
         userService.saveUser(user);
 

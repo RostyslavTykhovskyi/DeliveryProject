@@ -41,30 +41,36 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         userService.saveUser(User.builder()
                 .username("admin")
-                .email("admin@gmail.com")
+                .email("admin@mail.com")
                 .password(new BCryptPasswordEncoder().encode("admin"))
                 .balance(0)
                 .accountNonLocked(true)
                 .accountNonExpired(true)
                 .credentialsNonExpired(true)
                 .enabled(true)
-                .authorities(Collections.singleton(roleService.loadRoleByName("ROLE_ADMIN")))
+                .authorities(Collections.singleton(roleService.findByName("ROLE_ADMIN")))
                 .build());
 
         userService.saveUser(User.builder()
                 .username("user1")
-                .email("user@user")
+                .email("user@mail.com")
                 .password(new BCryptPasswordEncoder().encode("user1"))
                 .balance(0)
                 .accountNonLocked(true)
                 .accountNonExpired(true)
                 .credentialsNonExpired(true)
                 .enabled(true)
-                .authorities(Collections.singleton(roleService.loadRoleByName("ROLE_USER")))
+                .authorities(Collections.singleton(roleService.findByName("ROLE_USER")))
                 .build());
 
         routeService.saveRoute(Route.builder().departurePoint("Київ").arrivalPoint("Рівне").length(327).build());
         routeService.saveRoute(Route.builder().departurePoint("Київ").arrivalPoint("Львів").length(541).build());
+        routeService.saveRoute(Route.builder().departurePoint("Київ").arrivalPoint("Луцьк").length(400).build());
+        routeService.saveRoute(Route.builder().departurePoint("Київ").arrivalPoint("Харків").length(480).build());
+        routeService.saveRoute(Route.builder().departurePoint("Київ").arrivalPoint("Одеса").length(474).build());
+        routeService.saveRoute(Route.builder().departurePoint("Київ").arrivalPoint("Вінниця").length(268).build());
+        routeService.saveRoute(Route.builder().departurePoint("Київ").arrivalPoint("Чернігів").length(148).build());
+        routeService.saveRoute(Route.builder().departurePoint("Київ").arrivalPoint("Дніпро").length(476).build());
     }
 
     @Override
@@ -74,7 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/cabinet/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/registration").not().fullyAuthenticated()
-                .antMatchers("/", "/img/**").permitAll()
+                .antMatchers("/", "/order", "/img/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                     .formLogin()

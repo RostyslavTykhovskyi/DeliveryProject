@@ -1,28 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org">
-<head th:replace="head :: head(~{::title},~{})">
+<head th:replace="fragments/head :: head(~{::title},~{})">
     <title th:text="#{title.routes} + ' — Delivery'">Routes</title>
 </head>
 <body class="d-flex flex-column min-vh-100">
-<header th:replace="header :: header"></header>
+<header th:replace="fragments/header :: header"></header>
 
 <div class="container-lg d-flex flex-column align-items-center">
     <h1 style="margin-top: 50px;" th:text="#{routes}">Routes</h1>
     <h3 th:if="${routePage.content.size == 0}" th:text="#{empty}">Nothing to show</h3>
-    <table th:if="${routePage.content.size > 0}" class="table table-hover" style="width: 600px;">
+    <table th:if="${routePage.content.size > 0}" class="table table-hover align-middle" style="width: 800px;">
         <thead>
         <tr>
             <th scope="col">
-                <a th:href="@{/admin/routes(page=${routePage.number + 1}, sortField='id', sortDirection=${reverseSortDir})}">Id</a>
+                <a class="link-dark text-decoration-none" th:href="@{/admin/routes(page=${routePage.number + 1}, sortField='id', sortDirection=${reverseSortDir})}" th:text="${sortField != 'id'} ? 'Id' : 'Id' + ${sortDirection == 'desc' ? '▾' : '▴'}">Id</a>
             </th>
             <th scope="col">
-                <a th:href="@{/admin/routes(page=${routePage.number + 1}, sortField='departurePoint', sortDirection=${reverseSortDir})}" th:text="#{route.departure}">Departure point</a>
+                <a class="link-dark text-decoration-none" th:href="@{/admin/routes(page=${routePage.number + 1}, sortField='departurePoint', sortDirection=${reverseSortDir})}" th:text="${sortField != 'departurePoint'} ? #{route.departure} : #{route.departure} + ${sortDirection == 'desc' ? '▾' : '▴'}">Departure point</a>
             </th>
             <th scope="col">
-                <a th:href="@{/admin/routes(page=${routePage.number + 1}, sortField='arrivalPoint', sortDirection=${reverseSortDir})}" th:text="#{route.arrival}">Arrival point</a>
+                <a class="link-dark text-decoration-none" th:href="@{/admin/routes(page=${routePage.number + 1}, sortField='arrivalPoint', sortDirection=${reverseSortDir})}" th:text="${sortField != 'arrivalPoint'} ? #{route.arrival} : #{route.arrival} + ${sortDirection == 'desc' ? '▾' : '▴'}">Arrival point</a>
             </th>
             <th scope="col">
-                <a th:href="@{/admin/routes(page=${routePage.number + 1}, sortField='length', sortDirection=${reverseSortDir})}" th:text="#{route.length}">Length</a>
+                <a class="link-dark text-decoration-none" th:href="@{/admin/routes(page=${routePage.number + 1}, sortField='length', sortDirection=${reverseSortDir})}" th:text="${sortField != 'length'} ? #{route.length} : #{route.length} + ${sortDirection == 'desc' ? '▾' : '▴'}">Length</a>
             </th>
             <th scope="col" th:text="#{actions}">Actions</th>
         </tr>
@@ -33,7 +33,10 @@
             <td th:text="${route.departurePoint}">Departure point</td>
             <td th:text="${route.arrivalPoint}">Arrival point</td>
             <td th:text="${route.length}">Length</td>
-            <td></td>
+            <td>
+                <a class="btn btn-primary" th:href="@{/admin/routes/{id}(id=${route.id})}">Update</a>
+                <a class="btn btn-danger" th:href="@{/admin/deleteRoute/{id}(id=${route.id})}">Delete</a>
+            </td>
         </tr>
         </tbody>
     </table>
@@ -57,6 +60,6 @@
     </nav>
 </div>
 
-<footer th:replace="footer :: footer"></footer>
+<footer th:replace="fragments/footer :: footer"></footer>
 </body>
 </html>

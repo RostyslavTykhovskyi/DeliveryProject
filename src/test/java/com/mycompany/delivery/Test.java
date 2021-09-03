@@ -1,10 +1,18 @@
 package com.mycompany.delivery;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import com.mycompany.delivery.entity.Role;
 
 public class Test {
     @org.junit.jupiter.api.Test
     public void test() {
-        System.out.println(new BCryptPasswordEncoder().encode("admin"));
+        Role.RoleBuilder builder = Role.builder();
+
+        Role role = builder.id(10).name("name").build();
+
+        System.out.println(role.getName());
+
+        builder.name("hello");
+
+        System.out.println(role.getName());
     }
 }

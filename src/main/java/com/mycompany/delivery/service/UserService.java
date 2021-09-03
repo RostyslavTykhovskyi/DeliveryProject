@@ -30,7 +30,7 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void payForOrder(Order order) {
-        User user = userRepository.findById(order.getUser().getId()).orElseThrow(() -> new UsernameNotFoundException("user not found"));
+        User user = findById(order.getUser().getId());
         user.setBalance(user.getBalance() - order.getCost());
         order.setStatus(Status.PAID);
         userRepository.save(user);
@@ -45,7 +45,7 @@ public class UserService implements UserDetailsService {
     }
 
     public User findById(long id) {
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("user not found"));
+        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User with id " + id + " was not found"));
     }
 
     public User saveUser(User user) {

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org">
-<head th:replace="head :: head(~{::title},~{})">
+<head th:replace="fragments/head :: head(~{::title},~{})">
   <title th:text="#{title.admin} + ' — Delivery'">Administrative panel</title>
 </head>
 <body class="d-flex flex-column min-vh-100">
-<header th:replace="header :: header"></header>
+<header th:replace="fragments/header :: header"></header>
 
 <div class="container d-flex justify-content-between" style="width: 800px; margin-top: 50px;">
   <a class="link-primary fs-5 fw-bold" th:href="@{/admin/orders}" th:text="#{orders}"></a>
@@ -12,6 +12,6 @@
   <a class="link-primary fs-5 fw-bold" th:href="@{/admin/routes}" th:text="#{routes}"></a>
 </div>
 
-<footer th:replace="footer :: footer"></footer>
+<footer th:replace="fragments/footer :: footer"></footer>
 </body>
 </html>

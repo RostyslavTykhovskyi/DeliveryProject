@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org">
-<head th:replace="head :: head(~{::title},~{})">
+<head th:replace="fragments/head :: head(~{::title},~{})">
     <title th:text="#{title.login} + ' — Delivery'">Delivery</title>
 </head>
 <body class="d-flex flex-column min-vh-100">
-<header th:replace="header :: header"></header>
+<header th:replace="fragments/header :: header"></header>
 
 <div class="container" style="width: 500px; margin-top: 50px;">
     <div class="alert alert-danger" role="alert" th:if="${error}">
@@ -23,6 +23,6 @@
     </form>
 </div>
 
-<footer th:replace="footer :: footer"></footer>
+<footer th:replace="fragments/footer :: footer"></footer>
 </body>
 </html>

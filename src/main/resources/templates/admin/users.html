@@ -1,28 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org">
-<head th:replace="head :: head(~{::title},~{})">
+<head th:replace="fragments/head :: head(~{::title},~{})">
     <title th:text="#{title.users} + ' — Delivery'">Users</title>
 </head>
 <body class="d-flex flex-column min-vh-100">
-<header th:replace="header :: header"></header>
+<header th:replace="fragments/header :: header"></header>
 
 <div class="container-lg d-flex flex-column align-items-center">
     <h1 style="margin-top: 50px;" th:text="#{users}">Users</h1>
     <h3 th:if="${userPage.content.size == 0}" th:text="#{empty}">Nothing to show</h3>
-    <table th:if="${userPage.content.size > 0}" class="table table-hover" style="width: 800px;">
+    <table th:if="${userPage.content.size > 0}" class="table table-hover align-middle" style="width: 800px;">
         <thead>
         <tr>
             <th scope="col">
-                <a th:href="@{/admin/users(page=${userPage.number + 1}, sortField='id', sortDirection=${reverseSortDir})}">Id</a>
+                <a class="link-dark text-decoration-none" th:href="@{/admin/users(page=${userPage.number + 1}, sortField='id', sortDirection=${reverseSortDir})}" th:text="${sortField != 'id'} ? 'Id' : 'Id' + ${sortDirection == 'desc' ? '▾' : '▴'}">Id</a>
             </th>
             <th scope="col">
-                <a th:href="@{/admin/users(page=${userPage.number + 1}, sortField='username', sortDirection=${reverseSortDir})}" th:text="#{user.username}">username</a>
+                <a class="link-dark text-decoration-none" th:href="@{/admin/users(page=${userPage.number + 1}, sortField='username', sortDirection=${reverseSortDir})}" th:text="${sortField != 'username'} ? #{user.username} : #{user.username} + ${sortDirection == 'desc' ? '▾' : '▴'}">username</a>
             </th>
             <th scope="col">
-                <a th:href="@{/admin/users(page=${userPage.number + 1}, sortField='email', sortDirection=${reverseSortDir})}" th:text="#{user.email}">Email</a>
+                <a class="link-dark text-decoration-none" th:href="@{/admin/users(page=${userPage.number + 1}, sortField='email', sortDirection=${reverseSortDir})}" th:text="${sortField != 'email'} ? #{user.email} : #{user.email} + ${sortDirection == 'desc' ? '▾' : '▴'}">Email</a>
             </th>
             <th scope="col">
-                <a th:href="@{/admin/users(page=${userPage.number + 1}, sortField='balance', sortDirection=${reverseSortDir})}" th:text="#{user.balance}">Balance</a>
+                <a class="link-dark text-decoration-none" th:href="@{/admin/users(page=${userPage.number + 1}, sortField='balance', sortDirection=${reverseSortDir})}" th:text="${sortField != 'balance'} ? #{user.balance} : #{user.balance} + ${sortDirection == 'desc' ? '▾' : '▴'}">Balance</a>
             </th>
             <th scope="col" th:text="#{actions}">Actions</th>
         </tr>
@@ -57,6 +57,6 @@
     </nav>
 </div>
 
-<footer th:replace="footer :: footer"></footer>
+<footer th:replace="fragments/footer :: footer"></footer>
 </body>
 </html>

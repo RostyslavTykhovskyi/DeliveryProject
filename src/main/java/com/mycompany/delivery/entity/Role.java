@@ -18,11 +18,11 @@ import java.util.Set;
 public class Role implements GrantedAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_seq_gen")
-    @SequenceGenerator(name = "role_seq_gen", sequenceName = "role_id_seq")
-    @Column(name="role_id", nullable = false)
+    @SequenceGenerator(name = "role_seq_gen", sequenceName = "role_id_seq", allocationSize = 1)
+    @Column(name = "role_id")
     private long id;
 
-    @Column(name="name", nullable = false)
+    @Column(nullable = false)
     private String name;
 
     @ManyToMany(mappedBy = "authorities")

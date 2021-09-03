@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<html lang="en">
+<head th:replace="fragments/head :: head(~{::title},~{})">
+    <title th:text="#{title.registration} + ' — Delivery'">Registration</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<header th:replace="fragments/header :: header"></header>
+
+<div class="container" style="width: 500px; margin-top: 50px;">
+    <form th:action="@{/admin/routes/{id}(id=${route.id})}" th:object="${route}" method="POST">
+        <div class="mb-3">
+            <label for="id" class="form-label">Id</label>
+            <input type="number" class="form-control" id="id" th:value="${route.id}" disabled readonly>
+        </div>
+        <div class="mb-3">
+            <label for="departurePoint" class="form-label" th:text="#{route.departure}">Username</label>
+            <input type="text" class="form-control" id="departurePoint" th:field="*{departurePoint}" th:classappend="${#fields.hasErrors('departurePoint') ? 'is-invalid' : ''}" required>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('departurePoint')}" th:text="#{error.departure}">
+                Departure point must not be blank.
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="arrivalPoint" class="form-label" th:text="#{route.arrival}">Email</label>
+            <input type="text" class="form-control" id="arrivalPoint" th:field="*{arrivalPoint}" th:classappend="${#fields.hasErrors('arrivalPoint') ? 'is-invalid' : ''}" required>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('arrivalPoint')}" th:text="#{error.arrival}">
+                Arrival point must not be blank.
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="length" class="form-label" th:text="#{route.length}">Password</label>
+            <input type="number" class="form-control" id="length" th:field="*{length}" th:classappend="${#fields.hasErrors('length') ? 'is-invalid' : ''}" required>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('length')}" th:text="#{error.length}">
+                Length must be greater than 0.
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" th:text="#{button.save}">Save</button>
+    </form>
+</div>
+
+<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

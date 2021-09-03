@@ -31,7 +31,15 @@ public class RouteService {
         return routeRepository.save(route);
     }
 
+    public Route findById(long id) {
+        return routeRepository.findById(id).orElseThrow(() -> new RuntimeException("Route with id " + id + " was not found"));
+    }
+
     public List<Route> findAll() {
         return routeRepository.findAll();
+    }
+
+    public void deleteRoute(long id) {
+        routeRepository.deleteById(id);
     }
 }

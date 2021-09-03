@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head th:replace="fragments/head :: head(~{::title},~{})">
+    <title th:text="#{title.order} + ' — Delivery'">Delivery</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<header th:replace="fragments/header :: header"></header>
+
+<div class="container" style="width: 500px; margin-top: 50px; margin-bottom: 50px;">
+    <form th:action="@{/order}" th:object="${order}" method="POST">
+        <div class="mb-3">
+            <label for="route" class="form-label" th:text="#{order.route}">Route</label>
+            <select id="route" class="form-select" th:field="*{route}" required>
+                <option th:each="route : ${routes}" th:value="${route.id}" th:text="${route.departurePoint} + ' — ' + ${route.arrivalPoint}"></option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="length" class="form-label" th:text="#{order.length}">Length</label>
+            <input type="number" step="0.01" class="form-control" id="length" th:field="*{length}" th:classappend="${#fields.hasErrors('length') ? 'is-invalid' : ''}" required>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('length')}" th:text="#{error.length} + ' ' + ${minDimension} + ' - ' + ${maxDimension} + ' ' + #{unitOfLength}"></div>
+        </div>
+        <div class="mb-3">
+            <label for="width" class="form-label" th:text="#{order.width}">Width</label>
+            <input type="number" step="0.01" class="form-control" id="width" th:field="*{width}" th:classappend="${#fields.hasErrors('width') ? 'is-invalid' : ''}" required>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('width')}" th:text="#{error.width} + ' ' + ${minDimension} + ' - ' + ${maxDimension} + ' ' + #{unitOfLength}"></div>
+        </div>
+        <div class="mb-3">
+            <label for="height" class="form-label" th:text="#{order.height}">Height</label>
+            <input type="number" step="0.01" class="form-control" id="height" th:field="*{height}" th:classappend="${#fields.hasErrors('height') ? 'is-invalid' : ''}" required>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('height')}" th:text="#{error.height} + ' ' + ${minDimension} + ' - ' + ${maxDimension} + ' ' + #{unitOfLength}"></div>
+        </div>
+        <div class="mb-3">
+            <label for="weight" class="form-label" th:text="#{order.weight}">Weight</label>
+            <input type="number" step="0.01" class="form-control" id="weight" th:field="*{weight}" th:classappend="${#fields.hasErrors('weight') ? 'is-invalid' : ''}" required>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('weight')}" th:text="#{error.weight} + ' ' + ${minWeight} + ' - ' + ${maxWeight} + ' ' + #{unitOfMass}"></div>
+        </div>
+        <div class="mb-3" sec:authorize="isAuthenticated()">
+            <label for="address" class="form-label" th:text="#{order.address}">Address</label>
+            <input type="text" class="form-control" id="address" th:field="*{address}" th:classappend="${#fields.hasErrors('address') ? 'is-invalid' : ''}" required>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('address')}" th:text="#{error.address}"></div>
+        </div>
+        <div class="mb-3" sec:authorize="isAuthenticated()">
+            <label for="deliveryDate" class="form-label" th:text="#{order.deliveryDate}">Delivery date</label>
+            <input type="date" class="form-control" id="deliveryDate" th:field="*{deliveryDate}" th:classappend="${#fields.hasErrors('deliveryDate') ? 'is-invalid' : ''}" required>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('deliveryDate')}" th:text="#{error.deliveryDate} + ' ' + ${minDate} + ' - ' + ${maxDate}"></div>
+        </div>
+        <div class="fs-3 mb-2" th:if="${cost}" th:text="#{order.calculatedCost} + ': ' + ${cost} + ' ' + #{currency}"></div>
+        <input class="btn btn-primary" type="submit" name="calculate" th:value="#{button.calculate}">
+        <input class="btn btn-primary" type="submit" name="makeOrder" sec:authorize="isAuthenticated()" th:value="#{button.order}">
+    </form>
+</div>
+
+<footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>
